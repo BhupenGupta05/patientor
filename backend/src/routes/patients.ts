@@ -8,8 +8,17 @@ router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitivePatientData());
 })
 
-// since i dont know whether i should add ssn myself or generate it, 
-// i am adding it as a normal field 
+router.get('/:id', (req, res) => {
+  const {id} = req.params
+  const patient = patientService.getPatientById(id)
+
+  if(patient) {
+    res.send(patient)
+  } else {
+    res.status(404).send({ error: 'Patient not found' })
+  }
+})
+
 router.post('/', (req, res) => {
   try {
     const newPatientEntry = toNewPatientEntry(req.body)
