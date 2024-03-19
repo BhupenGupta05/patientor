@@ -1,3 +1,5 @@
+import { DiagnosisEntry } from "./types/Diagnosis/types"
+import { HospitalEntry, OccupationalHealthcareEntry, HealthCheckEntry } from "./types/Entry/types"
 import { Entry, Gender, NewPatientEntry } from "./types/Patient/types"
 
 const isString = (text: unknown): text is string => {
@@ -46,17 +48,89 @@ const parseGender = (gender: unknown): Gender => {
     }
     return gender
 }
+
+const parseDiagnosisCodes = (object: unknown): Array<DiagnosisEntry['code']> =>  {
+    if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+      // we will just trust the data to be in correct form
+      return [] as Array<DiagnosisEntry['code']>;
+    }
+  
+    return object.diagnosisCodes as Array<DiagnosisEntry['code']>;
+  };
+
+// Validation function for HospitalEntry
+export const validateHospitalEntry = (entry: any): HospitalEntry => {
+    if (!entry.date || !entry.description || !entry.specialist || !entry.discharge || !entry.discharge.date || !entry.discharge.criteria) {
+        console.log('Invalid entry', entry);
+        throw new Error('Invalid HospitalEntry: Missing required fields');
+    }
+    return {...entry, diagnosisCodes: parseDiagnosisCodes(entry)}
+};
+
+// Validation function for OccupationalHealthcareEntry
+export const validateOccupationalHealthcareEntry = (entry: any): OccupationalHealthcareEntry => {
+    if (!entry.date || !entry.description || !entry.specialist || !entry.diagnosisCodes || !entry.employerName || !entry.sickLeave) {
+        throw new Error('Invalid OccupationalHealthcareEntry: Missing required fields');
+    }
+    return {...entry, diagnosisCodes: parseDiagnosisCodes(entry)}
+};
+
+// Validation function for HealthCheckEntry
+export const validateHealthCheckEntry = (entry: any): HealthCheckEntry => {
+    if (!entry.date || !entry.description || !entry.specialist || !entry.diagnosisCodes || !entry.healthCheckRating) {
+        throw new Error('Invalid HealthCheckEntry: Missing required fields');
+    }
+    return {...entry, diagnosisCodes: parseDiagnosisCodes(entry)}
+}
+
+
+const parseHospitalEntry = (entry: any): HospitalEntry => {
+    return {
+        id: entry.id,
+        date: entry.date,
+        description: entry.description,
+        specialist: entry.specialist,
+        diagnosisCodes: entry.diagnosisCodes,
+        discharge: entry.discharge,
+        type: entry.type
+    };
+}
+
+const parseOccupationalHealthcareEntry = (entry: any): OccupationalHealthcareEntry => {
+    return {
+        id: entry.id,
+        date: entry.date,
+        description: entry.description,
+        specialist: entry.specialist,
+        diagnosisCodes: entry.diagnosisCodes,
+        employerName: entry.employerName,
+        sickLeave: entry.sickLeave,
+        type: entry.type
+    };
+}
+
+const parseHealthCheckEntry = (entry: any): HealthCheckEntry => {
+    return {
+        id: entry.id,
+        date: entry.date,
+        description: entry.description,
+        specialist: entry.specialist,
+        diagnosisCodes: entry.diagnosisCodes,
+        healthCheckRating: entry.healthCheckRating,
+        type: entry.type
+    };
+}
   
 // It worked
 const parseEntries = (entries: any): Entry[] => {
     return entries.map((entry: any) => {
         switch(entry.type) {
             case 'Hospital':
-                return {id: entry.id, date: entry.date, description: entry.description, specialist: entry.specialist, diagnosisCode: entry.diagnosisCodes, discharge: entry.discharge, type: entry.type}
+                return parseHospitalEntry(entry)
             case 'OccupationalHealthcare':
-                return {id: entry.id, date: entry.date, description: entry.description, specialist: entry.specialist, diagnosisCode: entry.diagnosisCodes, employerName: entry.employerName, sickLeave: entry.sickLeave, type: entry.type}
+                return parseOccupationalHealthcareEntry(entry)
             case 'HealthCheck':
-                return {id: entry.id, date: entry.date, description: entry.description, specialist: entry.specialist, diagnosisCode: entry.diagnosisCodes, healthCheckRating: entry.healthCheckRating, type: entry.type}
+                return parseHealthCheckEntry(entry)
             default:
                 throw new Error(`Invalid entry type: ${entry.type}`)
         }
