@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
   }
 })
 
-
+// this one
 router.post('/:id/entries', (req, res) => {
   const {id} = req.params
   const{type, ...entryData} = req.body
@@ -42,7 +42,6 @@ router.post('/:id/entries', (req, res) => {
     }
 
     const newEntry = patientService.addPatientEntry(id, validatedEntry)
-    console.log("validated entry: ",validatedEntry);
     res.status(201).json(newEntry)
     
   } catch (error: any) {

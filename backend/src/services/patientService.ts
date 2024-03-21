@@ -28,6 +28,7 @@ const addPatientData = (entry: NewPatientEntry): PatientEntry => {
     return newPatientData
 }
 
+
 const addPatientEntry = (patientId: string, newEntry: Entry): void => {
     const existingPatient = patientData.find(p => p.id === patientId)
 
@@ -35,7 +36,6 @@ const addPatientEntry = (patientId: string, newEntry: Entry): void => {
         const entryId = uuid()
         newEntry.id = entryId
         
-        console.log("New Entry: ", newEntry);
         existingPatient.entries.push(newEntry)
     } else {
         console.log(`Patient with ID ${patientId} not found.`);

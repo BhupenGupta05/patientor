@@ -38,9 +38,12 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry
 
-export interface NewHealthCheckEntry extends Omit<HealthCheckEntry, 'id'> {}
+// export interface NewHealthCheckEntry extends Omit<HealthCheckEntry, 'id'> {}
 
-export interface NewHospitalEntry extends Omit<HospitalEntry, 'id'> {}
+// export interface NewHospitalEntry extends Omit<HospitalEntry, 'id'> {}
 
-export interface NewOccupationalHealthcareEntry extends Omit<OccupationalHealthcareEntry, 'id'> {}
+// export interface NewOccupationalHealthcareEntry extends Omit<OccupationalHealthcareEntry, 'id'> {}
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never
+
+export type EntryWithoutId = UnionOmit<Entry, 'id'>
