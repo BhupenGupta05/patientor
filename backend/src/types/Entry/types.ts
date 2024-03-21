@@ -38,12 +38,7 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry
 
-// export interface NewHealthCheckEntry extends Omit<HealthCheckEntry, 'id'> {}
-
-// export interface NewHospitalEntry extends Omit<HospitalEntry, 'id'> {}
-
-// export interface NewOccupationalHealthcareEntry extends Omit<OccupationalHealthcareEntry, 'id'> {}
-
+// trick to exlude id from each and every entry while adding entry data
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never
 
 export type EntryWithoutId = UnionOmit<Entry, 'id'>
