@@ -41,6 +41,8 @@ router.post('/:id/entries', (req, res) => {
         throw new Error(`Invalid entry type: ${type}`)
     }
 
+    validatedEntry.type = type
+
     const newEntry = patientService.addPatientEntry(id, validatedEntry)
     res.status(201).json(newEntry)
     

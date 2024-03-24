@@ -72,11 +72,13 @@ export const validateOccupationalHealthcareEntry = (entry: any): OccupationalHea
     if (!entry.date || !entry.description || !entry.specialist || !entry.diagnosisCodes || !entry.employerName || !entry.sickLeave) {
         throw new Error('Invalid OccupationalHealthcareEntry: Missing required fields');
     }
-    return {...entry, diagnosisCodes: parseDiagnosisCodes(entry)}
+    return {...entry ,diagnosisCodes: parseDiagnosisCodes(entry)}
 };
 
 // Validation function for HealthCheckEntry
 export const validateHealthCheckEntry = (entry: any): HealthCheckEntry => {
+    console.log("Entry: ",entry);
+    
     if (!entry.date || !entry.description || !entry.specialist || !entry.diagnosisCodes || !entry.healthCheckRating) {
         throw new Error('Invalid HealthCheckEntry: Missing required fields');
     }

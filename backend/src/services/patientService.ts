@@ -30,6 +30,8 @@ const addPatientData = (entry: NewPatientEntry): PatientEntry => {
 
 
 const addPatientEntry = (patientId: string, newEntry: Entry): void => {
+    console.log("New entry: ",newEntry);
+    
     const existingPatient = patientData.find(p => p.id === patientId)
 
     if(existingPatient) {
